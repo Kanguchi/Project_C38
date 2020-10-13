@@ -6,6 +6,7 @@ var obstaclesGroup, obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obsta
 var score;
 var gameOver, gameOver_img, restart, restart_img;
 var PLAY, END, gameState;
+var playCount;
 var hiScore;
   PLAY = 1;
   END = 0;
@@ -64,6 +65,7 @@ function setup(){
   obstaclesGroup = new Group();
   
   score = 0;
+  playCount = 5;
   
   
 }
@@ -72,10 +74,11 @@ function setup(){
 function draw(){
   background("white");
 
-  console.log(ground.width);
+  console.log(playCount);
   
   fill("black");
   text("Score: " + score, camera.position.x + 200, 30);
+  text("Play Count: " + playCount, camera.position.x + 100, 30);
   
   //text("HI-Score: " + localStorage["HighestScore"], 420, 30);
   
@@ -126,10 +129,15 @@ function draw(){
     restart.visible = true;
     restart.x = camera.position.x;
     
-    if (mousePressedOver(restart)) {
+    if (mousePressedOver(restart) && playCount > 0) {
       reset();
+    } else if (playCount === 0){
+      restart.visible = false;
+      text("YOU HAVE USED ALL OF YOUR CHANCES", camera.position.x - 120, 100);
+      text("To play again, please reset", camera.position.x - 70, 130);
     }
   }
+
   
   trex.collide(invisibleGround);
   drawSprites();
@@ -191,6 +199,6 @@ function reset() {
   cloudsGroup.destroyEach();
   score = 0;
   trex.changeAnimation("running", trex_running);
-  
+  playCount = playCount - 1;
 }
 
